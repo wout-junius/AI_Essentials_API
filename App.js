@@ -27,15 +27,14 @@ var movesQue = [];
 }
 */
 app.post('/move', (req, res) => {
-    for(let move in req.body.moves){
-        movesQue[move.orderNr - 1] = move;
+    for(let move of req.body.moves){
+        movesQue.push(move)
     }
-    console.log(movesQue.toString());
+     movesQue.sort((a, b) => (a.OrderNr < b.OrderNr) ? a.OrderNr : b.OrderNr);
     res.send({Message: "Success"})
 })
 
 app.get('/plsSendNext', (req, res) => {
-    console.log(movesQue.length);
     if(movesQue.length > 0){
         var nextMove = movesQue[0];
         movesQue.shift()
