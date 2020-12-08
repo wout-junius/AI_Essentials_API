@@ -19,9 +19,9 @@ var movesQue = [];
 {
     moves: [
         {
-            "OrderNr" = Int //van 1 - x voor volgorde
-            "Direction" = string,
-             "Afstand" = int
+            "OrderNr" : int //van 1 - x voor volgorde
+            "Direction" : string,
+             "Afstand" : int
         }
     ]
 }
