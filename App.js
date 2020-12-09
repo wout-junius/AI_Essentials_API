@@ -26,7 +26,30 @@ var movesQue = [];
     ]
 }
 */
-app.post('/move', (req, res) => {
+
+app.get('/', (req, res) => {
+    let html = `
+    <h1> /sendmoves </h1>
+    {
+        moves: [
+            {
+                "OrderNr" : int //van 1 - x voor volgorde
+                "Direction" : string,
+                 "Afstand" : int
+            }
+        ]
+    }
+    <h1> /plsSendNext </h1>
+    {
+        "OrderNr" : int //van 1 - x voor volgorde
+        "Direction" : string,
+         "Afstand" : int
+    }
+    `
+    res.send(html)
+})
+
+app.post('/sendmoves', (req, res) => {
     for(let move of req.body.moves){
         movesQue.push(move)
     }
