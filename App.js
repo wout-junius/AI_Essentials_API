@@ -29,22 +29,27 @@ var movesQue = [];
 
 app.get('/', (req, res) => {
     let html = `
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
     <h1> /sendmoves </h1>
-    {
-        moves: [
-            {
-                "OrderNr" : int //van 1 - x voor volgorde
-                "Direction" : string,
-                 "Afstand" : int
-            }
-        ]
+    <code class="prettyprint" lang-json>
+    { </br>
+    &nbsp;     moves: [ </br>
+    &nbsp;&nbsp;        { </br>
+    &nbsp;&nbsp;&nbsp;      "OrderNr" : int //van 1 - x voor volgorde </br>
+    &nbsp;&nbsp;&nbsp;      "Direction" : string, </br>
+    &nbsp;&nbsp;&nbsp;      "Afstand" : int </br>
+    &nbsp;&nbsp;        } </br>
+    &nbsp;    ] </br>
     }
+    </code>
+    <code class="prettyprint" lang-js>
     <h1> /plsSendNext </h1>
-    {
-        "OrderNr" : int //van 1 - x voor volgorde
-        "Direction" : string,
-         "Afstand" : int
+    {</br>
+        &nbsp;   "OrderNr" : int //van 1 - x voor volgorde </br>
+        &nbsp;  "Direction" : string, </br>
+        &nbsp;   "Afstand" : int </br>
     }
+    </code>
     `
     res.send(html)
 })
