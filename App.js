@@ -55,6 +55,8 @@ app.get('/', (req, res) => {
 })
 
 app.post('/sendmoves', (req, res) => {
+    console.log("POST moves");
+    movesQue = []
     for(let move of req.body.moves){
         movesQue.push(move)
     }
@@ -62,15 +64,63 @@ app.post('/sendmoves', (req, res) => {
     res.send({Message: "Success"})
 })
 
-app.get('/plsSendNext', (req, res) => {
-    if(movesQue.length > 0){
-        var nextMove = movesQue[0];
-        movesQue.shift()
-        res.send(nextMove)
-    }else{
-        res.send({End: "Done"})
-    }    
+app.get('/getmoves', (req, res) => {
+    console.log("GET MOVES");
+    if(movesQue != null) {RouteToMoves();}
+    sendQue = (movesQue == null) ? "empty" : movesQue;
+    movesQue = null;
+    res.send(sendQue);
 })
+
+
+
+function RouteToMoves(robotDirection){
+    lastDirection = ""
+    movesQue.forEach(m => {
+        lastDirection = m.Direction;
+        if(m.OrderNr != 1){
+            if(m.Direction == movesQue[m.OrderNr-1].Direction){
+                m.Direction = "F";
+            }else{
+                switch(movesQue[m.OrderNr-1].Direction){
+                    case "D":
+                        m.Direction = (m.Direction == "L") ? "R" : "L";
+                        break;
+                    case "U":
+
+                        break;
+                    case "R":
+                        m.Direction = (m.Direction == "U") ? "L" : "R"
+                    break;
+                    case "L":
+                        m.Direction = (m.Direction == "D") ? "L" : "R"
+                    break;
+                }
+            }
+        }
+    });
+    let newDirection = "";
+    switch(lastDirection){
+        case "D":
+            newDirection = "B"
+            break;
+        case "U":
+            newDirection = "F"
+            break;
+        case "R":
+            newDirection = "L"
+        break;
+        case "L":
+            newDirection = "R"
+        break;
+    }
+    
+    movesQue.push({
+        "OrderNr" : movesQue.length + 1, //van 1 - x voor volgorde
+        "Direction" : newDirection,
+         "Afstand" : 1
+    })
+}
 
 app.listen(PORT ,()=> {
     console.log(`Listening on port ${PORT}`);
