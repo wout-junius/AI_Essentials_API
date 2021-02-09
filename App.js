@@ -76,28 +76,68 @@ app.get('/getmoves', (req, res) => {
 
 function RouteToMoves(robotDirection){
     lastDirection = ""
+    let ConverteMoves = [];
     movesQue.forEach(m => {
         lastDirection = m.Direction;
         if(m.OrderNr != 1){
-            if(m.Direction == movesQue[m.OrderNr-1].Direction){
-                m.Direction = "F";
+            console.log(JSON.stringify(movesQue));
+            console.log("stap " + m.OrderNr +" " + m.Direction + " " + movesQue[m.OrderNr-2].Direction);
+            if(m.Direction == movesQue[m.OrderNr-2].Direction){
+                console.log("-F");
+                ConverteMoves.push({
+                    "OrderNr" : m.OrderNr, //van 1 - x voor volgorde
+                    "Direction" :  "F",
+                     "Afstand" : 1
+                })
             }else{
-                switch(movesQue[m.OrderNr-1].Direction){
+                switch(movesQue[m.OrderNr-2].Direction){
                     case "D":
-                        m.Direction = (m.Direction == "L") ? "R" : "L";
+                        console.log("D");
+                        ConverteMoves.push({
+                            "OrderNr" : m.OrderNr, //van 1 - x voor volgorde
+                            "Direction" :  (m.Direction == "L") ? "R" : "L",
+                             "Afstand" : 1
+                        })
+                    
+                        console.log("-" + ConverteMoves[m.OrderNr - 1].Direction );
                         break;
                     case "U":
-
+                        console.log("U");
+                        ConverteMoves.push({
+                            "OrderNr" : m.OrderNr, //van 1 - x voor volgorde
+                            "Direction" :  (m.Direction == "L") ? "L" : "R",
+                             "Afstand" : 1
+                        })
+                        console.log("-" + ConverteMoves[m.OrderNr - 1].Direction );
                         break;
                     case "R":
-                        m.Direction = (m.Direction == "U") ? "L" : "R"
+                        console.log("F");
+                        ConverteMoves.push({
+                            "OrderNr" : m.OrderNr, //van 1 - x voor volgorde
+                            "Direction" :  (m.Direction == "U") ? "L" : "R",
+                             "Afstand" : 1
+                        })
+                        console.log("-" + ConverteMoves[m.OrderNr - 1].Direction );
                     break;
                     case "L":
-                        m.Direction = (m.Direction == "D") ? "L" : "R"
+                        console.log("L");
+                        ConverteMoves.push({
+                            "OrderNr" : m.OrderNr, //van 1 - x voor volgorde
+                            "Direction" :  (m.Direction == "D") ? "L" : "R",
+                             "Afstand" : 1
+                        })
+                        console.log("-" + ConverteMoves[m.OrderNr - 1].Direction );
                     break;
                 }
             }
+        }else{
+            ConverteMoves.push({
+                "OrderNr" : m.OrderNr, //van 1 - x voor volgorde
+                "Direction" :  m.Direction,
+                 "Afstand" : 1
+            })
         }
+        console.log("--------------------------------------------------------");
     });
     let newDirection = "";
     switch(lastDirection){
@@ -115,11 +155,13 @@ function RouteToMoves(robotDirection){
         break;
     }
     
-    movesQue.push({
+    ConverteMoves.push({
         "OrderNr" : movesQue.length + 1, //van 1 - x voor volgorde
         "Direction" : newDirection,
          "Afstand" : 1
     })
+
+    movesQue = ConverteMoves
 }
 
 app.listen(PORT ,()=> {
