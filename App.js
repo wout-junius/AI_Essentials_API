@@ -13,7 +13,7 @@ app.use(
     })
   );
 
-var movesQue = [];
+var movesQue = null;
 
 /*
 {
@@ -67,8 +67,9 @@ app.post('/sendmoves', (req, res) => {
 app.get('/getmoves', (req, res) => {
     console.log("GET MOVES");
     if(movesQue != null) {RouteToMoves();}
-    sendQue = (movesQue == null) ? "empty" : movesQue;
+    sendQue = (movesQue == null) ? [{"Empty": true}] : movesQue;
     movesQue = null;
+    console.log(sendQue);
     res.send(sendQue);
 })
 
